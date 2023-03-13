@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
 
@@ -102,6 +103,26 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testValidateSearchResult(){
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cann't find field for input search text",
+                5
+        );
+        waitForElementAndSendKey(
+                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]"),
+                "Google",
+                "Cann't find field for input search text",
+                5
+        );
+        waitForElementsAndCheckContainText(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_title']"),
+                "Google",
+                "Not all list items contain Google in the title"
+        );
+
+    }
 
     /*============================================================================================*/
 
@@ -112,6 +133,16 @@ public class FirstTest {
                 text,
                 element.getText());
         return element;
+    }
+
+    private List<WebElement> waitForElementsAndCheckContainText(By by, String text, String errorMessage){
+        List<WebElement> elements = new WebDriverWait(driver, 10).until(ExpectedConditions.presenceOfAllElementsLocatedBy(by));
+        for (WebElement element : elements) {
+            Assert.assertTrue(
+                    errorMessage,
+                    element.getText().contains(text));
+        }
+        return elements;
     }
 
 
