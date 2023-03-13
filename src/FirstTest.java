@@ -1,9 +1,14 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
 
@@ -25,6 +30,17 @@ public class FirstTest {
         capabilities.setCapability("app","D:\\practics\\javaAppiumAutomation\\apks\\wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/fragment_onboarding_skip_button')]"),
+                "Cann't find button 'SKIP'",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/view_announcement_action_negative')]"),
+                "Cann't find button 'Got It'",
+                5
+        );
     }
 
     @After
@@ -34,8 +50,43 @@ public class FirstTest {
     }
 
     @Test
-    public void firstTest()
-    {
-        System.out.println("First test run");
+    public void testCheckTextInSearchField(){
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cann't find field for input search text",
+                5
+        );
+        assertElementHasText(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Search Wikipedia",
+                "The field does not contain the expected text"
+        );
+
+    }
+
+
+    /*============================================================================================*/
+
+    private WebElement assertElementHasText(By by, String text, String errorMessage){
+        WebElement element = waitForElementPresent(by, "Cannot find element", 5);
+        Assert.assertEquals(
+                errorMessage,
+                text,
+                element.getText());
+        return element;
+    }
+
+
+    private WebElement waitForElementPresent(By by, String errorMessage, long timeoutInSeconds){
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(errorMessage + "\n");
+        return wait.until(ExpectedConditions.presenceOfElementLocated(by));
+    }
+
+    private WebElement waitForElementAndClick(By by, String errorMessage, long timeoutInSeconds) {
+        WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
+        element.click();
+        return element;
     }
 }
