@@ -62,7 +62,44 @@ public class FirstTest {
                 "Search Wikipedia",
                 "The field does not contain the expected text"
         );
+    }
 
+    @Test
+    public void testCancelSearch(){
+
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cann't find field for input search text",
+                5
+        );
+        waitForElementAndSendKey(
+                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]"),
+                "Google",
+                "Cann't find field for input search text",
+                5
+        );
+
+        waitForElementPresent(
+                By.xpath("//*[contains(@text,'Multilingual neural machine translation service')]"),
+                "Cann't find item list of results",
+                10
+        );
+
+        waitForElementAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cann't fiend cancel search button",
+                5
+        );
+        waitForElementNotPresent(
+                By.xpath("//*[contains(@text,'Multilingual neural machine translation service')]"),
+                "Element close search is visible on the page",
+                5
+        );
+        assertElementHasText(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Search Wikipedia",
+                "The search field isn't clean"
+        );
     }
 
 
@@ -88,5 +125,17 @@ public class FirstTest {
         WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
         element.click();
         return element;
+    }
+
+    private WebElement waitForElementAndSendKey(By by, String value, String errorMessage, long timeoutInSeconds) {
+        WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
+        element.sendKeys(value);
+        return element;
+    }
+
+    private boolean waitForElementNotPresent(By by, String errorMessage, long timeoutInSecond){
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSecond);
+        wait.withMessage(errorMessage + "\n");
+        return wait.until(ExpectedConditions.invisibilityOfElementLocated(by));
     }
 }
