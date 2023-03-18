@@ -19,6 +19,7 @@ import java.util.List;
 public class FirstTest {
 
     private AppiumDriver driver;
+    private String searchEditLocator = "//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]";
 
     @Before
     public void setUp() throws Exception
@@ -43,7 +44,7 @@ public class FirstTest {
         waitForElementAndClick(
                 By.xpath("//*[contains(@resource-id,'org.wikipedia:id/view_announcement_action_negative')]"),
                 "Cann't find button 'Got It'",
-                5
+                10
         );
     }
 
@@ -130,7 +131,6 @@ public class FirstTest {
     @Test
     public void testSaveArticlesToMyList() {
         String saveButtonLocator = "//android.widget.TextView[@content-desc='Save']";
-        String searchEditLocator = "//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]";
         String navigationUpButtonLocator = "//android.widget.ImageButton[@content-desc='Navigate up']";
         String clearQueryButtonLocator = "//android.widget.ImageView[@content-desc='Clear query']";
 
@@ -260,6 +260,31 @@ public class FirstTest {
         );
     }
 
+    @Test
+    public void testInstantAssertTitleOfArticle() {
+        waitForElementAndClick(
+                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "Cann't find field for input search text",
+                5
+        );
+        waitForElementAndSendKey(
+                By.xpath(this.searchEditLocator),
+                "Java",
+                "Cann't find field for input search text",
+                5
+        );
+        waitForElementAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//android.widget.TextView[contains(@text,'Object-oriented programming language') and contains(@resource-id,'org.wikipedia:id/page_list_item_description')]"),
+                "Cann't find item list of results",
+                5
+        );
+
+        assertElementPresent(
+                By.xpath("//*[@content-desc='Java (programming language)']"),
+                "Title of article not exist"
+        );
+    }
+
     /*============================================================================================*/
 
     private WebElement assertElementHasText(By by, String text, String errorMessage){
@@ -324,5 +349,9 @@ public class FirstTest {
     private String waitForElementAndGetAttribute(By by, String attribute, String errorMessage, long timeoutInSeconds){
         WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
         return element.getAttribute(attribute);
+    }
+
+    private void assertElementPresent(By by, String errorMessage){
+        waitForElementPresent(by, errorMessage,0);
     }
 }
