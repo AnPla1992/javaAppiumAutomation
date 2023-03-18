@@ -35,6 +35,7 @@ public class FirstTest {
         capabilities.setCapability("app","D:\\practics\\javaAppiumAutomation\\apks\\wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver.rotate(ScreenOrientation.PORTRAIT);
 
         waitForElementAndClick(
                 By.xpath("//*[contains(@resource-id,'org.wikipedia:id/fragment_onboarding_skip_button')]"),
