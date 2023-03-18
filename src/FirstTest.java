@@ -353,6 +353,9 @@ public class FirstTest {
     }
 
     private void assertElementPresent(By by, String errorMessage){
-        waitForElementPresent(by, errorMessage,0);
+       List<WebElement> elements =  driver.findElements(by);
+       Assert.assertTrue(
+               errorMessage,
+               elements.size() > 0);
     }
 }
