@@ -93,7 +93,7 @@ public class FirstTest {
 
         waitForElementAndClick(
                 By.id("org.wikipedia:id/search_close_btn"),
-                "Cann't fiend cancel search button",
+                "Cann't find cancel search button",
                 5
         );
         waitForElementNotPresent(
