@@ -99,4 +99,8 @@ public class SearchPageObject extends MainPageObject{
     public void assertThereIsNoResultOfSearch() {
         this.assertElementNotPresent(By.xpath(search_result_locator),"We've found some results by request");
     }
+
+    public void assertAllArticleContainText(String title) {
+        this.waitForElementsAndCheckContainText(By.xpath("search_result_locator"), title,"Not all list items contain in the title '" + title + "'");
+    }
 }

@@ -1,76 +1,32 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
+import lib.CoreTestCase;
+import lib.ui.MainPageObject;
+import lib.ui.SearchPageObject;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URL;
 import java.util.List;
 
-public class FirstTest {
-
-    private AppiumDriver driver;
+public class FirstTest extends CoreTestCase {
     private String searchEditLocator = "//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]";
-
-    @Before
-    public void setUp() throws Exception
-    {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-
-        capabilities.setCapability("platformName","Android");
-        capabilities.setCapability("deviceName","Android_8");
-        capabilities.setCapability("platformVersion","8.0");
-        capabilities.setCapability("automationName","Appium");
-        capabilities.setCapability("appPackage","org.wikipedia");
-        capabilities.setCapability("appActivity","org.wikipedia.main.MainActivity");
-        capabilities.setCapability("app","D:\\practics\\javaAppiumAutomation\\apks\\wikipedia.apk");
-
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-        driver.rotate(ScreenOrientation.PORTRAIT);
-
-        waitForElementAndClick(
-                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/fragment_onboarding_skip_button')]"),
-                "Cann't find button 'SKIP'",
-                5
-        );
-        waitForElementAndClick(
-                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/view_announcement_action_negative')]"),
-                "Cann't find button 'Got It'",
-                10
-        );
-    }
-
-    @After
-    public void tearDown()
-    {
-        driver.quit();
-    }
 
     @Test
     public void testCheckTextInSearchField(){
-
-        waitForElementAndClick(
-                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
-                "Cann't find field for input search text",
-                5
-        );
-        assertElementHasText(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Search Wikipedia",
-                "The field does not contain the expected text"
-        );
+        SearchPageObject searchPageObject = new SearchPageObject(this.driver);
+        searchPageObject.initSearchInput();
     }
 
     @Test
+    //EX3
     public void testCancelSearch(){
 
         waitForElementAndClick(
@@ -110,26 +66,16 @@ public class FirstTest {
 
     @Test
     public void testValidateSearchResult(){
-        waitForElementAndClick(
-                By.xpath("//*[contains(@text,'Search Wikipedia')]"),
-                "Cann't find field for input search text",
-                5
-        );
-        waitForElementAndSendKey(
-                By.xpath("//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]"),
-                "Google",
-                "Cann't find field for input search text",
-                5
-        );
-        waitForElementsAndCheckContainText(
-                By.xpath("//*[@resource-id='org.wikipedia:id/search_results_list']//android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_title']"),
-                "Google",
-                "Not all list items contain Google in the title"
-        );
 
+        String article_title = "Google";
+        SearchPageObject searchPageObject = new SearchPageObject(this.driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine(article_title);
+        searchPageObject.assertAllArticleContainText(article_title);
     }
 
     @Test
+            //EX5
     public void testSaveArticlesToMyList() {
         String saveButtonLocator = "//android.widget.TextView[@content-desc='Save']";
         String navigationUpButtonLocator = "//android.widget.ImageButton[@content-desc='Navigate up']";
@@ -262,6 +208,7 @@ public class FirstTest {
     }
 
     @Test
+    //EX6
     public void testInstantAssertTitleOfArticle() {
         waitForElementAndClick(
                 By.xpath("//*[contains(@text,'Search Wikipedia')]"),
