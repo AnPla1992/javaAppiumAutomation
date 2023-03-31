@@ -12,7 +12,7 @@ public class MyListPageObject extends  MainPageObject{
         super(driver);
     }
 
-    private static String getResultSearchElement(String substring) {
+    private static String getResultSavedElement(String substring) {
         return String.format(item_saved_list_by_id, substring);
     }
 
@@ -26,14 +26,14 @@ public class MyListPageObject extends  MainPageObject{
 
     public void deleteArticleFromList(String article) {
         this.swipeElementToLeft(
-                By.xpath(getResultSearchElement(article)),
+                By.xpath(getResultSavedElement(article)),
                 "Cannot find article '" + article + "' in list of saved articles"
         );
     }
 
     public void waitForArticleToDisappearByTitle(String article) {
         this.waitForElementNotPresent(
-                By.xpath(getResultSearchElement(article)),
+                By.xpath(getResultSavedElement(article)),
                 "Article '" + article + "' exist in list of saved articles",
                 5
         );
@@ -41,9 +41,18 @@ public class MyListPageObject extends  MainPageObject{
 
     public void waitForArticleToAppearByTitle(String article) {
         this.waitForElementPresent(
-                By.xpath(getResultSearchElement(article)),
+                By.xpath(getResultSavedElement(article)),
                 "Article '" + article + "' exist in list of saved articles",
                 5
         );
     }
+
+    public void openArticleFromList(String article) {
+        this.waitForElementAndClick(
+                By.xpath(getResultSavedElement(article)),
+                "Cannot find and open article '" + article + "' in saved list",
+                5
+        );
+    }
+
 }

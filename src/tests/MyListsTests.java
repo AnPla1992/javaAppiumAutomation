@@ -23,6 +23,7 @@ public class MyListsTests extends CoreTestCase {
         articlePageObject.waitForTitleElement("Java (programming language)");
         articlePageObject.addArticleToMyList();
         articlePageObject.closeArticle();
+        searchPageObject.clearSearchField();
         searchPageObject.goBackToMainPage();
 
         NavigationUI navigationUI = new NavigationUI(driver);

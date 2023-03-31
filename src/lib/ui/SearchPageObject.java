@@ -65,12 +65,15 @@ public class SearchPageObject extends MainPageObject{
                 "Cannot find and click search request result", 10);
     }
 
-    public void goBackToMainPage() {
+    public void clearSearchField(){
         this.waitForElementAndClick(
                 By.xpath(clear_query_button),
                 "Cannot find options cancel search button",
                 10
         );
+    }
+
+    public void goBackToMainPage() {
         this.waitForElementAndClick(
                 By.xpath(go_back_button),
                 "Cannot find back button",
