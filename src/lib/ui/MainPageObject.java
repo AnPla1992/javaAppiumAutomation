@@ -9,7 +9,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.sql.Driver;
 import java.util.List;
 
 public class MainPageObject {
@@ -120,5 +119,12 @@ public class MainPageObject {
         WebElement element = waitForElementPresent(by, errorMessage, timeoutInSeconds);
         element.click();
         return element;
+    }
+
+    public void assertElementPresent(By by, String errorMessage){
+        List<WebElement> elements =  driver.findElements(by);
+        Assert.assertTrue(
+                errorMessage,
+                elements.size() > 0);
     }
 }

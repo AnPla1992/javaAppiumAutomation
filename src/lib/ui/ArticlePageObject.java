@@ -22,7 +22,7 @@ public class ArticlePageObject extends MainPageObject {
 
     public String getArticleTitle(String title) {
         WebElement element = waitForTitleElement(title);
-        return element.getAttribute("text");
+        return element.getAttribute("content-desc");
     }
 
     public WebElement waitForTitleElement(String title) {
@@ -48,6 +48,13 @@ public class ArticlePageObject extends MainPageObject {
                 By.xpath(close_article_button),
                 "Cannot find navigate button",
                 5
+        );
+    }
+
+    public void assertTitleElementWithoutWait(String title) {
+        this.assertElementPresent(
+                By.xpath(getArticleTitleLocator(title)),
+                "Title of article not exist"
         );
     }
 }
