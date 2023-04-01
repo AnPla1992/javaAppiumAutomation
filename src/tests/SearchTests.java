@@ -24,6 +24,21 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
+    public void testSearchAndThreeResultInList(){
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchLine("Google");
+        int amount_of_search_results = searchPageObject.getAmountOfFoundArticles();
+        assertTrue(
+                "We found too few results",
+                amount_of_search_results>=3
+        );
+        searchPageObject.waitForElementByTitleAndDescription("Google","American technology company");
+        searchPageObject.waitForElementByTitleAndDescription("Google Maps","web mapping service");
+        searchPageObject.waitForElementByTitleAndDescription("Google Translate","Multilingual neural machine translation service");
+    }
+
+    @Test
     public void testCancelSearch(){
 
         SearchPageObject searchPageObject = new SearchPageObject(this.driver);

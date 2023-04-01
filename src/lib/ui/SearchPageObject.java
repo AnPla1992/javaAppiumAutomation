@@ -10,6 +10,7 @@ public class SearchPageObject extends MainPageObject{
         search_input = "//*[contains(@resource-id,'org.wikipedia:id/search_src_text')]",
         search_cancel_button = "org.wikipedia:id/search_close_btn",
         search_result_title_by_id_tpl = "//*[@resource-id='org.wikipedia:id/search_results_list']//android.widget.TextView[contains(@text,'%s') and contains(@resource-id,'org.wikipedia:id/page_list_item_description')]",
+        search_result_by_title_and_desc_tpl = "//*[@resource-id='org.wikipedia:id/search_results_list']//android.view.ViewGroup[child::android.widget.TextView[contains(@text,'%s') and contains(@resource-id,'org.wikipedia:id/page_list_item_title')] and child::android.widget.TextView[contains(@text,'%s') and contains(@resource-id,'org.wikipedia:id/page_list_item_description')]]",
         clear_query_button = "//android.widget.ImageView[@content-desc='Clear query']",
         go_back_button = "//*[@resource-id='org.wikipedia:id/search_toolbar']/android.widget.ImageButton",
         search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']//android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_title']",
@@ -21,6 +22,11 @@ public class SearchPageObject extends MainPageObject{
     /* Templates method */
     private static String getResultSearchElement(String substring) {
         return String.format(search_result_title_by_id_tpl, substring);
+    }
+
+    /* Templates method */
+    private static String getResultSearchElementByTwoSubstring(String substring_one, String substring_two) {
+        return String.format(search_result_by_title_and_desc_tpl, substring_one, substring_two);
     }
     /* Templates method */
 
@@ -105,5 +111,11 @@ public class SearchPageObject extends MainPageObject{
 
     public void assertAllArticleContainText(String title) {
         this.waitForElementsAndCheckContainText(By.xpath("search_result_locator"), title,"Not all list items contain in the title '" + title + "'");
+    }
+
+    public void waitForElementByTitleAndDescription(String title, String description) {
+        String search_result_title_xpath = getResultSearchElementByTwoSubstring(title, description);
+        this.waitForElementPresent(By.xpath(search_result_title_xpath),
+                "Cannot find search request result", 10);
     }
 }
